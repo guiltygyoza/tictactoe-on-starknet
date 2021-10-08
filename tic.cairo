@@ -154,7 +154,7 @@ func user_move {
     return (q_a_0, q_a_1, q_a_2, q_a_3, q_a_4, q_a_5, q_a_6, q_a_7, q_a_8, q_max)
 end
 
-@external
+@view
 func toy_lookup {
         storage_ptr : Storage*,
         pedersen_ptr : HashBuiltin*,
