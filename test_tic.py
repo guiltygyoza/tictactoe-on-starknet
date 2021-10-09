@@ -15,8 +15,8 @@ async def test_tic():
     ret = await contract.user_move(x=x, y=y).invoke()
     print(f"> user_move(x={x}, y={y}) returns: {ret}")
 
-    for y in range(3):
-        for x in range(3):
-            ret = await contract.view_board(x=x, y=y).call()
-            print(f'{ret.z}', end=' ')
-        print()
+    #for y in range(3):
+    #    for x in range(3):
+    #        ret = await contract.view_board(x=x, y=y).call()
+    #        print(f'{ret.z}', end=' ')
+    #    print()
