@@ -34,15 +34,49 @@ func view_board {
         storage_ptr : Storage*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-    }(
-        x : felt,
-        y : felt
-    ) -> (
-        z : felt
+    }() -> (
+        b_0_0 : felt,
+        b_0_1 : felt,
+        b_0_2 : felt,
+        b_1_0 : felt,
+        b_1_1 : felt,
+        b_1_2 : felt,
+        b_2_0 : felt,
+        b_2_1 : felt,
+        b_2_2 : felt
     ):
-    let (z) = board.read(x,y)
-    return (z)
+
+    let (b_0_0) = board.read(0,0)
+    let (b_0_1) = board.read(0,1)
+    let (b_0_2) = board.read(0,2)
+    let (b_1_0) = board.read(1,0)
+    let (b_1_1) = board.read(1,1)
+    let (b_1_2) = board.read(1,2)
+    let (b_2_0) = board.read(2,0)
+    let (b_2_1) = board.read(2,1)
+    let (b_2_2) = board.read(2,2)
+
+    return (b_0_0, b_0_1, b_0_2, b_1_0, b_1_1, b_1_2, b_2_0, b_2_1, b_2_2)
 end
+
+@external
+func reset_board {
+        storage_ptr : Storage*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+    }() -> ():
+    board.write(0,0,0)
+    board.write(0,1,0)
+    board.write(0,2,0)
+    board.write(1,0,0)
+    board.write(1,1,0)
+    board.write(1,2,0)
+    board.write(2,0,0)
+    board.write(2,1,0)
+    board.write(2,2,0)
+    return ()
+end
+
 
 @external
 func user_move {
