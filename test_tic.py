@@ -8,8 +8,8 @@ async def test_tic():
     contract = await starknet.deploy("tic.cairo")
 
     # board initialization
-    await contract.test_configure_board(1,1,2).invoke() # user is 2
-    await contract.test_configure_board(2,2,1).invoke() # AI is 1
+    #await contract.test_configure_board(1,1,2).invoke() # user is 2
+    #await contract.test_configure_board(2,2,1).invoke() # AI is 1
 
     board_0 = [0,0,0,0,0,0,0,0,0]
     (
@@ -26,8 +26,8 @@ async def test_tic():
     print()
 
     # user_move
-    x=2
-    y=0
+    x=1
+    y=1
 
     time1 = timer()
     ret_user_move = await contract.user_move(x=x, y=y).invoke()
