@@ -1,0 +1,172 @@
+[
+    {
+        "inputs": [],
+        "name": "check_game_status",
+        "outputs": [
+            {
+                "name": "status",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "view_board",
+        "outputs": [
+            {
+                "name": "b_0_0",
+                "type": "felt"
+            },
+            {
+                "name": "b_0_1",
+                "type": "felt"
+            },
+            {
+                "name": "b_0_2",
+                "type": "felt"
+            },
+            {
+                "name": "b_1_0",
+                "type": "felt"
+            },
+            {
+                "name": "b_1_1",
+                "type": "felt"
+            },
+            {
+                "name": "b_1_2",
+                "type": "felt"
+            },
+            {
+                "name": "b_2_0",
+                "type": "felt"
+            },
+            {
+                "name": "b_2_1",
+                "type": "felt"
+            },
+            {
+                "name": "b_2_2",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "row",
+                "type": "felt"
+            },
+            {
+                "name": "col",
+                "type": "felt"
+            },
+            {
+                "name": "val",
+                "type": "felt"
+            }
+        ],
+        "name": "test_configure_board",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "reset_board",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "row_user",
+                "type": "felt"
+            },
+            {
+                "name": "col_user",
+                "type": "felt"
+            }
+        ],
+        "name": "user_move",
+        "outputs": [
+            {
+                "name": "q_a_0",
+                "type": "felt"
+            },
+            {
+                "name": "q_a_1",
+                "type": "felt"
+            },
+            {
+                "name": "q_a_2",
+                "type": "felt"
+            },
+            {
+                "name": "q_a_3",
+                "type": "felt"
+            },
+            {
+                "name": "q_a_4",
+                "type": "felt"
+            },
+            {
+                "name": "q_a_5",
+                "type": "felt"
+            },
+            {
+                "name": "q_a_6",
+                "type": "felt"
+            },
+            {
+                "name": "q_a_7",
+                "type": "felt"
+            },
+            {
+                "name": "q_a_8",
+                "type": "felt"
+            },
+            {
+                "name": "q_max",
+                "type": "felt"
+            },
+            {
+                "name": "argmax",
+                "type": "felt"
+            },
+            {
+                "name": "row_ai",
+                "type": "felt"
+            },
+            {
+                "name": "col_ai",
+                "type": "felt"
+            }
+        ],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "x",
+                "type": "felt"
+            },
+            {
+                "name": "y",
+                "type": "felt"
+            }
+        ],
+        "name": "toy_lookup",
+        "outputs": [
+            {
+                "name": "z",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
