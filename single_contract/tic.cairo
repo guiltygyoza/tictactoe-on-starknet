@@ -12,26 +12,112 @@ from starkware.cairo.common.default_dict import (
 from starkware.cairo.common.dict import (
     dict_write, dict_read, dict_update)
 
-# Utility function that wraps and inverts is_not_zero()
-func is_zero {range_check_ptr} (value) -> (res):
-    # invert the result of is_not_zero()
-    let (temp) = is_not_zero(value)
-    if temp == 0:
+# Utiliy function that inverts input 0<->1
+func invert {range_check_ptr} (value) -> (res):
+    if value == 0:
         return (res=1)
+    else:
+        return (res=0)
     end
-
-    return (res=0)
 end
 
-func game_has_ended (
+# Utility function that wraps and inverts is_not_zero()
+func is_zero {range_check_ptr} (value) -> (res):
+    let (temp) = is_not_zero(value)
+    let (temp_inv) = invert(temp)
+    return (res = temp_inv)
+end
 
-    ) -> (
-
+@view
+func check_game_status {
+        storage_ptr : Storage*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+    } () -> (
+        status : felt
     ):
-    TODO
+    alloc_locals
+
+    let (b_0_0, b_0_1, b_0_2, b_1_0, b_1_1, b_1_2, b_2_0, b_2_1, b_2_2) = view_board()
+
+    local storage_ptr : Storage* = storage_ptr
+    local pedersen_ptr : HashBuiltin* = pedersen_ptr
+
+    #let (status, ongoing, ai_win, user_win, draw, board_full, someone_win) = game_status (b_0_0, b_0_1, b_0_2, b_1_0, b_1_1, b_1_2, b_2_0, b_2_1, b_2_2)
+    #return (status, ongoing, ai_win, user_win, draw, board_full, someone_win)
+
+    let (status) = game_status (b_0_0, b_0_1, b_0_2, b_1_0, b_1_1, b_1_2, b_2_0, b_2_1, b_2_2)
+    return (status)
+end
+
+func game_status {range_check_ptr} (
+        b_0_0 : felt, b_0_1 : felt, b_0_2 : felt,
+        b_1_0 : felt, b_1_1 : felt, b_1_2 : felt,
+        b_2_0 : felt, b_2_1 : felt, b_2_2 : felt
+    ) -> (
+        status : felt
+    ):
+    alloc_locals
+
+    # Status: { 0:ongoing, 1:ai_win, 2:user_win, 3:draw }
+    let (local bool_ai_0_0) = is_zero(b_0_0-1)
+    let (local bool_ai_0_1) = is_zero(b_0_1-1)
+    let (local bool_ai_0_2) = is_zero(b_0_2-1)
+    let (local bool_ai_1_0) = is_zero(b_1_0-1)
+    let (local bool_ai_1_1) = is_zero(b_1_1-1)
+    let (local bool_ai_1_2) = is_zero(b_1_2-1)
+    let (local bool_ai_2_0) = is_zero(b_2_0-1)
+    let (local bool_ai_2_1) = is_zero(b_2_1-1)
+    let (local bool_ai_2_2) = is_zero(b_2_2-1)
+
+    let (local bool_user_0_0) = is_zero(b_0_0-2)
+    let (local bool_user_0_1) = is_zero(b_0_1-2)
+    let (local bool_user_0_2) = is_zero(b_0_2-2)
+    let (local bool_user_1_0) = is_zero(b_1_0-2)
+    let (local bool_user_1_1) = is_zero(b_1_1-2)
+    let (local bool_user_1_2) = is_zero(b_1_2-2)
+    let (local bool_user_2_0) = is_zero(b_2_0-2)
+    let (local bool_user_2_1) = is_zero(b_2_1-2)
+    let (local bool_user_2_2) = is_zero(b_2_2-2)
+
+    let (local bool_filled_0_0) = is_not_zero(b_0_0)
+    let (local bool_filled_0_1) = is_not_zero(b_0_1)
+    let (local bool_filled_0_2) = is_not_zero(b_0_2)
+    let (local bool_filled_1_0) = is_not_zero(b_1_0)
+    let (local bool_filled_1_1) = is_not_zero(b_1_1)
+    let (local bool_filled_1_2) = is_not_zero(b_1_2)
+    let (local bool_filled_2_0) = is_not_zero(b_2_0)
+    let (local bool_filled_2_1) = is_not_zero(b_2_1)
+    let (local bool_filled_2_2) = is_not_zero(b_2_2)
+
     # Check for wins on diagonals
+    let ai_win_diagonal   = (bool_ai_0_0 * bool_ai_1_1 * bool_ai_2_2) + (bool_ai_0_2 * bool_ai_1_1 * bool_ai_2_0)
+    let user_win_diagonal = (bool_user_0_0 * bool_user_1_1 * bool_user_2_2) + (bool_user_0_2 * bool_user_1_1 * bool_user_2_0)
+
     # Check for wins on rows
+    let ai_win_row   = (bool_ai_0_0 * bool_ai_0_1 * bool_ai_0_2) + (bool_ai_1_0 * bool_ai_1_1 * bool_ai_1_2) + (bool_ai_2_0 * bool_ai_2_1 * bool_ai_2_2)
+    let user_win_row = (bool_user_0_0 * bool_user_0_1 * bool_user_0_2) + (bool_user_1_0 * bool_user_1_1 * bool_user_1_2) + (bool_user_2_0 * bool_user_2_1 * bool_user_2_2)
+
     # Check for wins on columns
+    let ai_win_col   = (bool_ai_0_0 * bool_ai_1_0 * bool_ai_2_0) + (bool_ai_0_1 * bool_ai_1_1 * bool_ai_2_1) + (bool_ai_0_2 * bool_ai_1_2 * bool_ai_2_2)
+    let user_win_col = (bool_user_0_0 * bool_user_1_0 * bool_user_2_0) + (bool_user_0_1 * bool_user_1_1 * bool_user_2_1) + (bool_user_0_2 * bool_user_1_2 * bool_user_2_2)
+
+    # Aggregatator logic
+    let ai_win   = ai_win_diagonal + ai_win_row + ai_win_col
+    let user_win = user_win_diagonal + user_win_row + user_win_col
+    let someone_win = ai_win + user_win
+    let (no_one_win) = invert(someone_win)
+
+    let board_full = bool_filled_0_0 * bool_filled_0_1 * bool_filled_0_2 * bool_filled_1_0 * bool_filled_1_1 * bool_filled_1_2 * bool_filled_2_0 * bool_filled_2_1 * bool_filled_2_2
+    let (board_not_full) = invert(board_full)
+    let draw = board_full * no_one_win
+
+    let ongoing = no_one_win * board_not_full
+
+    let status = (ongoing * 0) + (ai_win * 1) + (user_win * 2) + (draw * 3)
+
+    #return (status, ongoing, ai_win, user_win, draw, board_full, someone_win)
+    return (status)
 end
 
 @storage_var

@@ -17,6 +17,13 @@ async def test_tic():
     starknet = await Starknet.empty()
     contract = await starknet.deploy("tic.cairo")
 
+    status_dict = {
+        0 : 'ongoing',
+        1 : 'ai win',
+        2 : 'user win',
+        3 : 'draw'
+    }
+
     # board initialization
     await contract.test_configure_board(1,1,2).invoke() # user is 2
     await contract.test_configure_board(2,2,1).invoke() # AI is 1
@@ -29,6 +36,10 @@ async def test_tic():
         board[6], board[7], board[8]
     ) = await contract.view_board().call()
     read_and_print_board(board)
+
+    ret = await contract.check_game_status().call()
+    print(f"> game status: {status_dict[ret.status]}")
+    print()
 
     # Round 1
     print("> Round 1")
@@ -45,6 +56,9 @@ async def test_tic():
         board[6], board[7], board[8]
     ) = await contract.view_board().call()
     read_and_print_board(board)
+
+    ret = await contract.check_game_status().call()
+    print(f"> game status: {status_dict[ret.status]}")
     print()
 
     # Round 2
@@ -62,3 +76,6 @@ async def test_tic():
         board[6], board[7], board[8]
     ) = await contract.view_board().call()
     read_and_print_board(board)
+
+    ret = await contract.check_game_status().call()
+    print(f"> game status: {status_dict[ret.status]}")
