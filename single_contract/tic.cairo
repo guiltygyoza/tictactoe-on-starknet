@@ -11,6 +11,7 @@ from starkware.cairo.common.default_dict import (
     default_dict_new, default_dict_finalize)
 from starkware.cairo.common.dict import (
     dict_write, dict_read, dict_update)
+from starkware.cairo.common.dict_access import DictAccess
 
 # Utiliy function that inverts input 0<->1
 func invert {range_check_ptr} (value) -> (res):
@@ -390,10 +391,6 @@ func q_lookup {range_check_ptr}(
 
     let initial_value = 0
     let (local dict) = default_dict_new(default_value = initial_value)
-    default_dict_finalize(
-        dict_accesses_start = dict,
-        dict_accesses_end = dict,
-        default_value = initial_value)
 
     dict_write {dict_ptr=dict} (key = 0, new_value = 136)
     dict_write {dict_ptr=dict} (key = 1620, new_value = 100)
@@ -3506,6 +3503,15 @@ func q_lookup {range_check_ptr}(
     dict_write {dict_ptr=dict} (key = 24258, new_value = 99)
     dict_write {dict_ptr=dict} (key = 38148, new_value = 99)
     dict_write {dict_ptr=dict} (key = 8848, new_value = 99)
+
+    local dict : DictAccess* = dict
+
+    default_dict_finalize(
+        dict_accesses_start = dict,
+        dict_accesses_end = dict,
+        default_value = initial_value)
+
+    ## dict finalized ##
 
     tempvar key = a + s
     let (val) = dict_read {dict_ptr=dict} (key)
